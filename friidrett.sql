@@ -63,14 +63,16 @@ CREATE TABLE Event (
        competition INTEGER,
        location VARCHAR(255),
        startTime TIME,
-       UNIQUE(disciplineName, className, competition, location)
+       UNIQUE(disciplineName, className, competition)
 );
 
-ALTER TABLE Event ADD CONSTRAINT event_discipline
-       FOREIGN KEY (disciplineName) REFERENCES Discipline(disciplineName);
+/* Foreign keys */
 
-ALTER TABLE Event ADD CONSTRAINT event_class
-       FOREIGN KEY (className) REFERENCES CompetitorClass(className);
+ALTER TABLE Event ADD CONSTRAINT event_discipline
+       FOREIGN KEY (disciplineName, className) REFERENCES Discipline_Class(disciplineName, className);
+
+/*ALTER TABLE Event ADD CONSTRAINT event_class
+       FOREIGN KEY (className) REFERENCES CompetitorClass(className);*/
 
 ALTER TABLE Event ADD CONSTRAINT event_competition
        FOREIGN KEY (competition) REFERENCES Competition(competitionId);
@@ -106,9 +108,13 @@ ALTER TABLE Competitor ADD CONSTRAINT competitor_competition
 CREATE TABLE EventParticipation (
        startingNumber INTEGER,
        eventId INTEGER,
+       seasonBest DOUBLE,
+       isPesent BOOLEAN,
        results VARCHAR(510),
        PRIMARY KEY(startingNumber, eventId)
 );
+
+/* Foreign keys */
 
 ALTER TABLE EventParticipation ADD CONSTRAINT participation_event_
        FOREIGN KEY (eventId) REFERENCES Event(eventId);
@@ -138,7 +144,7 @@ DROP CONSTRAINT comp_discipline;
 * Table drops
 *******************************************************************/
 
-DROP TABLE EventParticipation;
+/*DROP TABLE EventParticipation;
 
 DROP TABLE Competitor;
 
@@ -150,4 +156,4 @@ DROP TABLE CompetitorClass;
 
 DROP TABLE Discipline;
 
-DROP TABLE Competition;
+DROP TABLE Competition;*/
