@@ -1,0 +1,11 @@
+*.o
+*~
+.depend
+*.aux
+*.log
+*.out
+*.pdf
+*.toc
+\#*
+.#*
+.~*
