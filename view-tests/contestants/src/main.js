@@ -69,7 +69,7 @@ var state = {
         },
         {
             startNum:69,
-            name:'Mathias Johansen',
+            name:'Magnus Thun',
             club:'Moss IL',
             present:true
         }
