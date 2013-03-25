@@ -1,0 +1,134 @@
+html
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+body
+{
+    margin: 0px;
+    padding: 0px;
+
+    height: 100%;
+
+    font-size: 50px;
+    font-family: 'Helvetica Neue';
+    background-color: rgb(50, 50, 50);
+}
+
+.overview
+{
+    background-color: white;
+    border-radius: 20px;
+    height: 100%;
+
+    text-align: center;
+}
+
+.header
+{
+    padding: 20px;
+    padding-top: 0px;
+    height: 100px;
+    border-bottom: 2px solid rgb(50, 50, 50);
+}
+
+.discipline
+{
+    float: left;
+    font-size: 90px;
+    font-weight: 500;
+}
+
+.class
+{
+    float: right;
+    font-size: 90px;
+    font-weight: 500;
+}
+
+.info
+{
+    height: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.location
+{
+    float: left;
+}
+
+
+.startingTime
+{
+    float: right;
+}
+
+.numContestants
+{
+    vertical-align: middle;
+    font-size: 72px;
+}
+
+.remarks
+{
+    background-color: rgb(200, 200, 200);
+    border-radius: 10px;
+    text-align: center;
+
+    display: inline-block;
+
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+
+.notifications
+{
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.notification
+{
+    padding: 5px;
+    height: 50px;
+
+    background-color: rgb(100, 100, 100);
+    border-top: 1px solid white;
+
+    font-size: 36px;
+    color: white;
+
+    text-align: left;
+}
+
+.notification:first-child
+{
+    border-top: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.notification:last-child
+{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.rules
+{
+    margin-top: 20px;
+    padding: 20px;
+    cursor: pointer;
+
+    background-color: rgb(200, 200, 200);
+    color: black;
+
+    display: inline-block;
+    border-radius: 10px;
+
+    border: 3px solid rgb(50, 50, 50);
+}
