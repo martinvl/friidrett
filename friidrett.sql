@@ -57,10 +57,13 @@ ALTER TABLE Discipline_Class ADD CONSTRAINT comp_class
 
 
 CREATE TABLE Event (
+       eventId INTEGER PRIMARY KEY,
        disciplineName VARCHAR(32),
        className VARCHAR(32),
        competition INTEGER,
-       startTime TIME
+       location VARCHAR(255),
+       startTime TIME,
+       UNIQUE(disciplineName, className, competition, location)
 );
 
 ALTER TABLE Event ADD CONSTRAINT event_discipline
@@ -96,6 +99,22 @@ ALTER TABLE Competitor ADD CONSTRAINT competitor_competition
 
 
 /*******************************************************************
+* Event participation table
+*******************************************************************/
+
+
+CREATE TABLE EventParticipation (
+       startingNumber INTEGER,
+       eventId INTEGER,
+       results VARCHAR(510),
+       PRIMARY KEY(startingNumber, eventId)
+);
+
+ALTER TABLE EventParticipation ADD CONSTRAINT participation_event_
+       FOREIGN KEY (eventId) REFERENCES Event(eventId);
+
+
+/*******************************************************************
 * Constraint drops
 *******************************************************************/
 
@@ -119,6 +138,7 @@ DROP CONSTRAINT comp_discipline;
 * Table drops
 *******************************************************************/
 
+DROP TABLE EventParticipation;
 
 DROP TABLE Competitor;
 
