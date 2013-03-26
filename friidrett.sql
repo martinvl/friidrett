@@ -17,11 +17,24 @@ CREATE TABLE Competition (
 *******************************************************************/
 
 
+CREATE TABLE Archetype (
+       archtypeName VARCHAR(32) PRIMARY KEY
+);
+
+
+/*******************************************************************
+* Discipline table
+*******************************************************************/
+
+
 CREATE TABLE Discipline (
        disciplineName VARCHAR(32) PRIMARY KEY,
-       archtype VARCHAR(32),
-       disciplineDescription VARCHAR(255)
+       archtype VARCHAR(32) NOT NULL,
+       description VARCHAR(255)
 );
+
+ALTER TABLE Discipline ADD CONSTRAINT discipline_archtype
+      FOREIGN KEY (archtype) REFERENCES Archtype (archtypeName);
 
 
 /*******************************************************************
