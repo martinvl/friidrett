@@ -43,15 +43,15 @@ ContestantsView.prototype.setState = function (state, silent) {
 };
 
 ContestantsView.prototype.handleToggle = function (contestantView) {
-    this.emit('toggle_contestant', contestantView);
+    this.emit('toggle_contestant', contestantView.competitorId);
 };
 
 ContestantsView.prototype.update = function () {
     this.headerView.update();
 
     this.contestantsList.innerHTML = '';
-    for (var idx in this.state.competitors) {
-        var contestant = this.state.competitors[idx];
+    for (var competitorId in this.state.competitors) {
+        var contestant = this.state.competitors[competitorId];
         var contestantView = new ContestantView();
 
         var self = this;
@@ -59,6 +59,7 @@ ContestantsView.prototype.update = function () {
             self.handleToggle(contestantView);
         });
 
+        contestantView.competitorId = competitorId;
         contestantView.setState(contestant);
 
         this.contestantsList.appendChild(contestantView.el);

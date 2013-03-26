@@ -6,7 +6,8 @@ var ContestantsView = require('../../view-tests/views/ContestantsView/Contestant
 
 // --- Config ---
 var HOST = 'localhost/friidrett';
-var PORT = 8888;
+var PUBLIC_PORT = 8888;
+var PRIVATE_PORT = 8889;
 
 function App() {
     this.initialize();
@@ -17,6 +18,7 @@ module.exports = App;
 App.prototype.initialize = function () {
     this.setupElement();
     this.setupSubviews();
+    this.setupConnection();
     this.setupSync();
 };
 
@@ -29,27 +31,38 @@ App.prototype.setupSubviews = function () {
 
     this.selectionView = new DisciplineSelectionView();
     this.selectionView.on('select', function (discipline) {
-        var schedule = self.getEventsForDiscipline(discipline.name);
-
-        self.scheduleView.setState(schedule);
+        self.scheduleView.disciplineName = discipline.name;
+        self.pushState();
         self.presentSchedule();
     });
 
     this.scheduleView = new ScheduleView();
     this.scheduleView.on('select', function (eventId) {
-        var competitors = self.getCompetitorsForEvent(eventId);
-
-        self.competitorView.setState(competitors);
+        self.competitorView.eventId = eventId;
+        self.pushState();
         self.presentCompetitors();
     });
 
     this.competitorView = new ContestantsView();
+    this.competitorView.on('toggle_contestant', function (competitorId) {
+        var competitor = self.state.competitors[competitorId];
+
+        // copy
+        var newCompetitor = {
+            startNum:competitor.startNum,
+            name:competitor.name,
+            club:competitor.club,
+            present:!competitor.isPresent
+        };
+
+        self.saveCompetitor(competitorId, newCompetitor);
+    });
 };
 
 App.prototype.setupSync = function () {
-    this.connect();
+    var connection = io.connect(HOST, {port:PUBLIC_PORT, 'force new connection':true});
 
-    this.sync = new ObjSync(this.connection, {delimiter:'/'});
+    this.sync = new ObjSync(connection, {delimiter:'/'});
 
     var self = this;
     this.sync.on('update', function () {
@@ -57,14 +70,32 @@ App.prototype.setupSync = function () {
     });
 };
 
-App.prototype.connect = function () {
-    this.connection = io.connect(HOST, {port:PORT, 'force new connection':true});
+App.prototype.setupConnection = function () {
+    this.connection = io.connect('/', {port:PRIVATE_PORT, 'force new connection':true});
 };
 
 App.prototype.setState = function (state) {
     this.state = state;
 
-    this.selectionView.setState(state.disciplines);
+    this.pushState();
+};
+
+App.prototype.pushState = function () {
+    this.selectionView.setState(this.state.disciplines);
+
+    if (this.scheduleView.hasOwnProperty('disciplineName')) {
+        var disciplineName = this.scheduleView.disciplineName;
+        var events = this.getEventsForDiscipline(disciplineName);
+
+        this.scheduleView.setState(events);
+    }
+
+    if (this.competitorView.hasOwnProperty('eventId')) {
+        var eventId = this.competitorView.eventId;
+        var eventState = this.getStateForEvent(eventId);
+
+        this.competitorView.setState(eventState);
+    }
 };
 
 App.prototype.getEventsForDiscipline = function (disciplineName) {
@@ -80,7 +111,7 @@ App.prototype.getEventsForDiscipline = function (disciplineName) {
     return events;
 };
 
-App.prototype.getCompetitorsForEvent = function (eventId) {
+App.prototype.getStateForEvent = function (eventId) {
     var competitors = {};
 
     var participations = this.state.events[eventId].participations;
@@ -118,4 +149,11 @@ App.prototype.presentOverview = function () {
 App.prototype.presentCompetitors = function () {
     this.el.innerHTML = '';
     this.el.appendChild(this.competitorView.el);
+};
+
+App.prototype.saveCompetitor = function (competitorId, competitor) {
+    this.connection.emit('saveCompetitor', {
+        competitorId:competitorId,
+        competitor:competitor
+    });
 };

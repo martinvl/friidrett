@@ -6,7 +6,8 @@ var ObjDist = require('objdist');
 var DBManager = require('../../private_server/DBManager');
 
 // --- Configuration ---
-var PORT = 8888;
+var PUBLIC_PORT = 8888;
+var PRIVATE_PORT = 8889;
 var DATA_PREFIX = 'friidrett';
 
 // --- Setup express ---
@@ -16,16 +17,19 @@ var frontendPath = path.join(__dirname, '..', 'frontend');
 app.use(express.static(frontendPath));
 
 var server = http.createServer(app);
-server.listen(PORT);
+server.listen(PUBLIC_PORT);
 
 // --- Setup socket.io ---
-var transport = io.listen(server);
+var public_transport = io.listen(server);
 
-transport.set('log level', 0)
-transport.disable('browser client');
+public_transport.set('log level', 0)
+public_transport.disable('browser client');
+
+var private_transport = io.listen(PRIVATE_PORT);
+private_transport.set('log level', 0)
 
 // --- Setup distibution ---
-var dist = new ObjDist(transport, {prefix:DATA_PREFIX});
+var dist = new ObjDist(public_transport, {prefix:DATA_PREFIX});
 
 // --- Setup DB manager ---
 var dbManager = new DBManager();
@@ -35,131 +39,8 @@ dbManager.on('update', function () {
     console.dir(dbManager.competitions[1]);
 });
 
-/*
-var state = {
-    disciplines:[
-        ],
-    events:{
-        1:{
-            disciplineName:'Discipline 1',
-            className:'MJ',
-            remarks:'',
-            location:'Hovedbanen',
-            startTime:'09.00',
-            participations:{
-                1:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                },
-                2:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                },
-                3:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                }
-            }
-        },
-        2:{
-            disciplineName:'Discipline 1',
-            className:'J18-19',
-            remarks:'',
-            location:'Hovedbanen',
-            startTime:'10.00',
-            participations:{
-                1:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                },
-                2:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                },
-                3:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                },
-                4:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                },
-                5:{
-                    isPresent:false,
-                    seasonBest:0.0,
-                    result:{
-                        // result data goes here
-                    }
-                }
-            }
-        }
-    },
-    competitors:{
-        1:{
-            startNum:69,
-            name:'Martin Larsen',
-            club:'Moss IL',
-            present:false
-        },
-        2:{
-            startNum:69,
-            name:'Sebastian Søberg',
-            club:'Moss IL',
-            present:false
-        },
-        3:{
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        4:{
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        5:{
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        }
-    }
-};
-
-setInterval(addDiscipline, 2000);
-
-function addDiscipline() {
-    var discipline = {
-        name:'Discipline ' + state.disciplines.length,
-        description:''
-    };
-
-    state.disciplines.push(discipline);
-    dist.setObject(state);
-}
-
-addDiscipline();
-*/
+private_transport.on('saveCompetitor', function (payload) {
+    console.dir('save');
+    console.dir(payload);
+    dbManager.updateCompetitor(payload.competitorId, payload.competitor);
+});
