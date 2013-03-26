@@ -165,10 +165,10 @@ DBManager.prototype.assembleEventParticipations = function (eventId) {
 	    var part = {
 		isPresent:participationData.ispresent
 		seasonBest:participationData.seasonbest
-		results:participationData.results
+		results:participationData.results  // OBSOBS seriell data, dette kommer kun som tekst fra SQL
 	    }
+
 	    participations[participationData.competitorid] = part;
-	 
 	}
     }
     return participations;
