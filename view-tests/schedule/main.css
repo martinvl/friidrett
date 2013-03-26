@@ -16,7 +16,7 @@ body
     background-color: rgb(50, 50, 50);
 }
 
-.contestants_view
+.schedule_view
 {
     background-color: white;
     border-radius: 20px;
@@ -25,54 +25,12 @@ body
     text-align: center;
 }
 
-.event_headline
+.events
 {
     padding: 20px;
-    padding-top: 0px;
-    height: 100px;
-    border-bottom: 2px solid rgb(50, 50, 50);
 }
 
-.event_discipline
-{
-    float: left;
-    font-size: 90px;
-    font-weight: 500;
-}
-
-.event_class
-{
-    float: right;
-    font-size: 90px;
-    font-weight: 500;
-}
-
-.event_info
-{
-    height: 60px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.event_location
-{
-    float: left;
-}
-
-
-.event_startingTime
-{
-    float: right;
-}
-
-.contestants
-{
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-}
-
-.contestant
+.event
 {
     padding: 5px;
     margin-top: 20px;
@@ -84,49 +42,47 @@ body
     color: white;
 
     text-align: left;
+    height: 100px;
 
     border-radius: 10px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-.start_num
+.event:first-child
 {
-    font-size: 72px;
+    margin-top:0px;
+}
+
+.event_start_time
+{
     float: left;
-    width: 100px;
-
-    margin: 10px;
-    margin-top: 0px;
+    margin-left: 10px;
+    font-weigth: 600;
+    font-size: 86px;
 }
 
-.name
+.event_info
 {
+    height: 100%;
+    margin-left: 226px;
 }
 
-.club
+.event_discipline
 {
+    float: left;
+    margin-left: 50px;
+    font-weigth: 600;
 }
 
-.button
+.event_class
 {
-    border-radius: 20px;
-    width: 40px;
-    height: 40px;
-    background-color: white;
+    float: left;
+    font-weigth: 600;
+    margin-left: 10px;
+}
+
+.event_location
+{
     float: right;
-}
-
-.present
-{
-    float: right;
-
-    padding: 23px;
-}
-
-.not_present > .button
-{
-    width: 36px;
-    height: 36px;
-    background-color: rgb(100, 100, 100);
-    border: 2px solid white;
+    margin-right: 10px;
 }

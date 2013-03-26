@@ -387,99 +387,75 @@ process.binding = function (name) {
 
 });
 
-require.define("/views/ContestantsView/ContestantsView.js",function(require,module,exports,__dirname,__filename,process){var EventEmitter = require('events').EventEmitter;
-var ContestantView = require('../ContestantView/ContestantView');
-var EventHeaderView = require('../EventHeaderView/EventHeaderView');
+require.define("/views/ScheduleView/ScheduleView.js",function(require,module,exports,__dirname,__filename,process){var EventEmitter = require('events').EventEmitter;
+var EventView = require('./EventView');
 
-function ContestantsView() {
+function ScheduleView() {
     EventEmitter.prototype.constructor.apply(this);
 
     this.initialize();
     this.update();
 }
 
-ContestantsView.prototype = new EventEmitter();
-ContestantsView.prototype.constructor = ContestantsView;
-module.exports = ContestantsView;
+ScheduleView.prototype = new EventEmitter();
+ScheduleView.prototype.constructor = ScheduleView;
+module.exports = ScheduleView;
 
-ContestantsView.prototype.initialize = function () {
+ScheduleView.prototype.initialize = function () {
     this.setupState();
     this.setupElement();
 };
 
-ContestantsView.prototype.setupState = function () {
+ScheduleView.prototype.setupState = function () {
     this.state = {};
 };
 
-ContestantsView.prototype.setupElement = function () {
+ScheduleView.prototype.setupElement = function () {
     this.el = document.createElement('div');
-    this.el.className = 'contestants_view';
+    this.el.className = 'schedule_view';
 
-    this.headerView = new EventHeaderView();
-    this.el.appendChild(this.headerView.el);
-
-    this.contestantsList = document.createElement('div');
-    this.contestantsList.className = 'contestants';
-    this.el.appendChild(this.contestantsList);
+    this.eventsList = document.createElement('div');
+    this.eventsList.className = 'events';
+    this.el.appendChild(this.eventsList);
 };
 
-ContestantsView.prototype.setState = function (state, silent) {
+ScheduleView.prototype.setState = function (state, silent) {
     this.state = state;
-    this.headerView.setState(state, true);
 
     if (!silent)
         this.update();
 };
 
-ContestantsView.prototype.handleToggle = function (contestantView) {
-    this.emit('toggle_contestant', contestantView);
+ScheduleView.prototype.handleSelect = function (eventView) {
+    this.emit('select', eventView.eventId);
 };
 
-ContestantsView.prototype.update = function () {
-    this.headerView.update();
+ScheduleView.prototype.update = function () {
+    this.eventsList.innerHTML = '';
 
-    this.contestantsList.innerHTML = '';
-    for (var idx in this.state.contestants) {
-        var contestant = this.state.contestants[idx];
-        var contestantView = new ContestantView();
+    for (var eventId in this.state) {
+        var event = this.state[eventId];
+        var eventView = new EventView();
 
         var self = this;
-        contestantView.on('toggle', function (contestantView) {
-            self.handleToggle(contestantView);
+        eventView.on('select', function () {
+            self.handleSelect(this);
         });
 
-        contestantView.setState(contestant);
-
-        this.contestantsList.appendChild(contestantView.el);
+        eventView.eventId = eventId;
+        eventView.setState(event);
+        this.eventsList.appendChild(eventView.el);
     }
 };
 
 /*
 {
-    discipline:'Spyd',
-    className:'MJ',
-    location:'Hovedbanen',
-    startingTime:'09.00',
-    contestants:[
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        }
-    ]
+    <event id>:{
+        startTime:'',
+        disciplineName:'',
+        className:'',
+        location:''
+    }
 }
 */
 
@@ -659,245 +635,114 @@ EventEmitter.prototype.listeners = function(type) {
 
 });
 
-require.define("/views/ContestantView/ContestantView.js",function(require,module,exports,__dirname,__filename,process){var EventEmitter = require('events').EventEmitter;
+require.define("/views/ScheduleView/EventView.js",function(require,module,exports,__dirname,__filename,process){var EventEmitter = require('events').EventEmitter;
 
-function ContestantView() {
+function EventView() {
     EventEmitter.prototype.constructor.apply(this);
 
     this.initialize();
     this.update();
 }
 
-ContestantView.prototype = new EventEmitter();
-ContestantView.prototype.constructor = ContestantView;
-module.exports = ContestantView;
+EventView.prototype = new EventEmitter();
+EventView.prototype.constructor = EventView;
+module.exports = EventView;
 
-ContestantView.prototype.initialize = function () {
+EventView.prototype.initialize = function () {
     this.setupState();
     this.setupElement();
 };
 
-ContestantView.prototype.setupState = function () {
+EventView.prototype.setupState = function () {
     this.state = {};
 };
 
-ContestantView.prototype.setupElement = function () {
+EventView.prototype.setupElement = function () {
     this.el = document.createElement('div');
-    this.el.className = 'contestant';
-
-    this.startNumField = document.createElement('div');
-    this.startNumField.className = 'start_num';
-    this.el.appendChild(this.startNumField);
-
-    this.presentField = document.createElement('div');
-    var presentButton = document.createElement('div');
-    presentButton.className = 'button';
-    this.presentField.appendChild(presentButton);
-    this.el.appendChild(this.presentField);
+    this.el.className = 'event';
 
     var self = this;
-    if (this.presentField.hasOwnProperty('ontouchend')) {
-        this.presentField.ontouchend = function () {
-            self.handleToggle();
+    if (this.el.hasOwnProperty('ontouchend')) {
+        this.el.ontouchend = function () {
+            self.handleSelect();
         };
     } else {
-        this.presentField.onclick = function () {
-            self.handleToggle();
+        this.el.onclick = function () {
+            self.handleSelect();
         };
     }
 
-    this.nameField = document.createElement('div');
-    this.nameField.className = 'name';
-    this.el.appendChild(this.nameField);
+    this.startTimeField = document.createElement('div');
+    this.startTimeField.className = 'event_start_time';
+    this.el.appendChild(this.startTimeField);
 
-    this.clubField = document.createElement('div');
-    this.clubField.className = 'club';
-    this.el.appendChild(this.clubField);
-};
-
-ContestantView.prototype.handleToggle = function () {
-    this.emit('toggle', this);
-};
-
-ContestantView.prototype.toggle = function () {
-    this.state.present = !this.state.present;
-    this.update();
-};
-
-ContestantView.prototype.setState = function (state) {
-    this.state = state;
-
-    this.update();
-};
-
-ContestantView.prototype.update = function () {
-    this.startNumField.innerHTML = this.state.startNum;
-    this.presentField.className = 'present' + (this.state.present ? '' : ' not_present');
-    this.nameField.innerHTML = this.state.name;
-    this.clubField.innerHTML = this.state.club;
-};
-
-/*
-   {
-   startNum:69,
-   name:'Mathias Johansen',
-   club:'Moss IL',
-   present:false
-   }
-   */
-
-});
-
-require.define("/views/EventHeaderView/EventHeaderView.js",function(require,module,exports,__dirname,__filename,process){function EventHeaderView() {
-    this.initialize();
-    this.update();
-}
-
-module.exports = EventHeaderView;
-
-EventHeaderView.prototype.initialize = function () {
-    this.setupState();
-    this.setupElement();
-};
-
-EventHeaderView.prototype.setupState = function () {
-    this.state = {};
-};
-
-EventHeaderView.prototype.setupElement = function () {
-    this.el = document.createElement('div');
-    this.el.className = 'event_header';
-
-    var header = document.createElement('div');
-    header.className = 'event_headline';
-    this.el.appendChild(header);
+    var infoField = document.createElement('div');
+    infoField.className = 'event_info';
+    this.el.appendChild(infoField);
 
     this.disciplineField = document.createElement('div');
     this.disciplineField.className = 'event_discipline';
-    header.appendChild(this.disciplineField);
+    infoField.appendChild(this.disciplineField);
 
     this.classNameField = document.createElement('div');
     this.classNameField.className = 'event_class';
-    header.appendChild(this.classNameField);
-
-    var info = document.createElement('div');
-    info.className = 'event_info';
-    this.el.appendChild(info);
+    infoField.appendChild(this.classNameField);
 
     this.locationField = document.createElement('div');
     this.locationField.className = 'event_location';
-    info.appendChild(this.locationField);
+    infoField.appendChild(this.locationField);
 
-    this.startingTimeField = document.createElement('div');
-    this.startingTimeField.className = 'event_startingTime';
-    info.appendChild(this.startingTimeField);
 };
 
-EventHeaderView.prototype.setState = function (state, silent) {
+EventView.prototype.handleSelect = function () {
+    this.emit('select', this);
+};
+
+EventView.prototype.setState = function (state, silent) {
     this.state = state;
 
     if (!silent)
         this.update();
 };
 
-EventHeaderView.prototype.update = function () {
-    this.disciplineField.innerHTML = this.state.discipline;
+EventView.prototype.update = function () {
+    this.startTimeField.innerHTML = this.state.startTime;
+    this.disciplineField.innerHTML = this.state.disciplineName;
     this.classNameField.innerHTML = this.state.className;
     this.locationField.innerHTML = this.state.location;
-    this.startingTimeField.innerHTML = this.state.startingTime;
 };
 
 /*
-{
-    discipline:'Spyd',
-    className:'MJ',
-    location:'Hovedbanen',
-    startingTime:'09.00'
-}
+    {
+        startTime:'',
+        disciplineName:'',
+        className:'',
+        location:''
+    }
 */
 
 });
 
-require.define("/contestants/src/main.js",function(require,module,exports,__dirname,__filename,process){var ContestantsView = require('../../views/ContestantsView/ContestantsView');
+require.define("/schedule/src/main.js",function(require,module,exports,__dirname,__filename,process){var ScheduleView = require('../../views/ScheduleView/ScheduleView');
 
-var view = new ContestantsView();
+var view = new ScheduleView();
 var state = {
-    discipline:'Spyd',
-    className:'MJ',
-    location:'Hovedbanen',
-    startingTime:'09.00',
-    contestants:[
-        {
-            startNum:69,
-            name:'Martin Larsen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Sebastian Søberg',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Mathias Johansen',
-            club:'Moss IL',
-            present:false
-        },
-        {
-            startNum:69,
-            name:'Jonas Aarum',
-            club:'Moss IL',
-            present:true
-        }
-    ]
+    1:{
+        startTime:'09.00',
+        disciplineName:'Spyd',
+        className:'MJ',
+        location:'Hovedbanen'
+    },
+    2:{
+        startTime:'10.00',
+        disciplineName:'Spyd',
+        className:'J18-19',
+        location:'Kjelleren'
+    }
 };
 
-view.on('toggle_contestant', function (contestantView) {
-    contestantView.toggle();
+view.on('select', function (eventId) {
+    window.alert('Select event ' + eventId);
 });
 
 view.setState(state);
@@ -905,5 +750,5 @@ view.setState(state);
 document.body.appendChild(view.el);
 
 });
-require("/contestants/src/main.js");
+require("/schedule/src/main.js");
 })();
