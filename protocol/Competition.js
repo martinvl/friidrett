@@ -4,7 +4,8 @@
     disciplines:[
         {
             name:'',
-            description:''
+            description:'',
+	    archtype:''
         }
     ],
     events:{

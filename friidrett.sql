@@ -19,6 +19,7 @@ CREATE TABLE Competition (
 
 CREATE TABLE Discipline (
        disciplineName VARCHAR(32) PRIMARY KEY,
+       archtype VARCHAR(32),
        disciplineDescription VARCHAR(255)
 );
 
