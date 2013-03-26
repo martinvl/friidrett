@@ -33,6 +33,8 @@ CREATE TABLE Discipline (
        description VARCHAR(255)
 );
 
+/* Foreign keys */
+
 ALTER TABLE Discipline ADD CONSTRAINT discipline_archetype
       FOREIGN KEY (archetype) REFERENCES Archetype (archetypeName);
 
@@ -129,7 +131,7 @@ CREATE TABLE EventParticipation (
        competitorId INTEGER,
        eventId INTEGER,
        isPresent BOOLEAN NOT NULL,
-       seasonBest REAL,
+       seasonBest VARCHAR(32),
        results VARCHAR(510),
        PRIMARY KEY(competitorId, eventId)
 );
