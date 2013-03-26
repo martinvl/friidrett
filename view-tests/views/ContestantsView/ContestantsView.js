@@ -50,8 +50,8 @@ ContestantsView.prototype.update = function () {
     this.headerView.update();
 
     this.contestantsList.innerHTML = '';
-    for (var idx in this.state.contestants) {
-        var contestant = this.state.contestants[idx];
+    for (var idx in this.state.competitors) {
+        var contestant = this.state.competitors[idx];
         var contestantView = new ContestantView();
 
         var self = this;
@@ -70,8 +70,8 @@ ContestantsView.prototype.update = function () {
     discipline:'Spyd',
     className:'MJ',
     location:'Hovedbanen',
-    startingTime:'09.00',
-    contestants:[
+    startTime:'09.00',
+    competitors:[
         {
             startNum:69,
             name:'Mathias Johansen',

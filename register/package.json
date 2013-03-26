@@ -1,0 +1,11 @@
+{
+    "name":"friidrett-register",
+    "version":"0.1.0a-1",
+    "dependencies":{
+        "socket.io":">=0.9",
+        "socket.io-client":">=0.9",
+        "express":">=3.0",
+        "objdist":">=0.1",
+        "objsync":">=0.1"
+    }
+}

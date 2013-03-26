@@ -19,27 +19,27 @@ EventHeaderView.prototype.setupElement = function () {
     this.el.className = 'event_header';
 
     var header = document.createElement('div');
-    header.className = 'event_headline';
+    header.className = 'event_header_headline';
     this.el.appendChild(header);
 
     this.disciplineField = document.createElement('div');
-    this.disciplineField.className = 'event_discipline';
+    this.disciplineField.className = 'event_header_discipline';
     header.appendChild(this.disciplineField);
 
     this.classNameField = document.createElement('div');
-    this.classNameField.className = 'event_class';
+    this.classNameField.className = 'event__headerclass';
     header.appendChild(this.classNameField);
 
     var info = document.createElement('div');
-    info.className = 'event_info';
+    info.className = 'event_header_info';
     this.el.appendChild(info);
 
     this.locationField = document.createElement('div');
-    this.locationField.className = 'event_location';
+    this.locationField.className = 'event_header_location';
     info.appendChild(this.locationField);
 
     this.startingTimeField = document.createElement('div');
-    this.startingTimeField.className = 'event_startingTime';
+    this.startingTimeField.className = 'event_header_startingTime';
     info.appendChild(this.startingTimeField);
 };
 
@@ -54,7 +54,7 @@ EventHeaderView.prototype.update = function () {
     this.disciplineField.innerHTML = this.state.discipline;
     this.classNameField.innerHTML = this.state.className;
     this.locationField.innerHTML = this.state.location;
-    this.startingTimeField.innerHTML = this.state.startingTime;
+    this.startingTimeField.innerHTML = this.state.startTime;
 };
 
 /*
@@ -62,6 +62,6 @@ EventHeaderView.prototype.update = function () {
     discipline:'Spyd',
     className:'MJ',
     location:'Hovedbanen',
-    startingTime:'09.00'
+    startTime:'09.00'
 }
 */

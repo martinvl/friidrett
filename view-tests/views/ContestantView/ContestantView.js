@@ -25,12 +25,12 @@ ContestantView.prototype.setupElement = function () {
     this.el.className = 'contestant';
 
     this.startNumField = document.createElement('div');
-    this.startNumField.className = 'start_num';
+    this.startNumField.className = 'contestant_start_num';
     this.el.appendChild(this.startNumField);
 
     this.presentField = document.createElement('div');
     var presentButton = document.createElement('div');
-    presentButton.className = 'button';
+    presentButton.className = 'contestant_button';
     this.presentField.appendChild(presentButton);
     this.el.appendChild(this.presentField);
 
@@ -46,11 +46,11 @@ ContestantView.prototype.setupElement = function () {
     }
 
     this.nameField = document.createElement('div');
-    this.nameField.className = 'name';
+    this.nameField.className = 'contestant_name';
     this.el.appendChild(this.nameField);
 
     this.clubField = document.createElement('div');
-    this.clubField.className = 'club';
+    this.clubField.className = 'contestant_club';
     this.el.appendChild(this.clubField);
 };
 
@@ -71,7 +71,7 @@ ContestantView.prototype.setState = function (state) {
 
 ContestantView.prototype.update = function () {
     this.startNumField.innerHTML = this.state.startNum;
-    this.presentField.className = 'present' + (this.state.present ? '' : ' not_present');
+    this.presentField.className = 'contestant_present' + (this.state.present ? '' : ' contestant_not_present');
     this.nameField.innerHTML = this.state.name;
     this.clubField.innerHTML = this.state.club;
 };
