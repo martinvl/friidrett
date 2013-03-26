@@ -132,41 +132,42 @@ DBManager.prototype.getDisciplines = function () {
 };
 
 DBManager.prototype.updateParticipation = function (competitorId, eventId, participation) {
-    var query = 'UPDATE EventParticipation SET isPresent = ' + participation.isPresent + ' , seasonBest = ' + participation.seasonBest + ' results = ' participation.results ' WHERE competitorId = ' + competitorId + ' AND eventId = ' + eventId + ';';
+    var query = 'UPDATE EventParticipation SET isPresent = ' + participation.isPresent + ' , seasonBest = ' + (participation.seasonBest || 0) + ', results = \'' + participation.results + '\' WHERE competitorId = ' + competitorId + ' AND eventId = ' + eventId + ';';
 
     this.client.query(query, function (err, result) {
-	if(err) {
-	    console.dir(err);
-	    return; //her må vi få en bedre løsning
-	}
+        if(err) {
+            console.dir(err);
+            return; //her må vi få en bedre løsning
+        }
 
-	console.dir(result);
+        console.dir(result);
     });
 }
 
 DBManager.prototype.updateEvent = function (eventId, event) {
-    var query = 'UPDATE Event SET startTime = ' + event.startTime + ' , notifications = ' + event.notifications + ' isOpen = ' event.isOpen ' WHERE eventId = ' + eventId + ';';
+    var query = 'UPDATE Event SET startTime = ' + event.startTime + ' , notifications = ' + event.notifications + ' isOpen = ' + event.isOpen + ' WHERE eventId = ' + eventId + ';';
 
     this.client.query(query, function (err, result) {
-	if(err) {
-	    console.dir(err);
-	    return; //her må vi få en bedre løsning
-	}
+        if(err) {
+            console.dir(err);
+            return; //her må vi få en bedre løsning
+        }
 
-	console.dir(result);
+        console.dir(result);
     });
 }
 
 DBManager.prototype.updateCompetitor = function (competitorId, competitor) {
-    var query = 'UPDATE Competitor SET startingNumber = ' + competitor.startNum + ' , competitorName = ' + competitor.name + ' , competitorClub = ' + competitor.club + ' competitorClass = ' + competitor.className + ' WHERE competitorId = ' + competitorId ';';
+    console.dir(competitor);
+    var query = 'UPDATE Competitor SET startingNumber = ' + competitor.startNum + ' , competitorName = \'' + competitor.name + '\', competitorClub = \'' + competitor.club + '\', competitorClass = \'' + competitor.className + '\' WHERE competitorId = ' + competitorId + ';';
 
     this.client.query(query, function (err, result) {
-	if(err) {
-	    console.dir(err);
-	    return; //her må vi få en bedre løsning
-	}
+        if(err) {
+            console.dir(err);
+            return; //her må vi få en bedre løsning
+        }
 
-	console.dir(result);
+        console.dir(result);
     });
 };
 
@@ -205,13 +206,13 @@ DBManager.prototype.assemble = function () {
     var competitionData = this.competitionData;
     var competitionId = competitionData[0].competitionid
 
-    var competition = {
-        name:competitionData[0].competitionname,
-        isOpen:competitionData[0].isopen,
-        disciplines:disciplines,
-        events:events,
-        competitors:competitors
-    }
+        var competition = {
+            name:competitionData[0].competitionname,
+            isOpen:competitionData[0].isopen,
+            disciplines:disciplines,
+            events:events,
+            competitors:competitors
+        }
 
     this.setCompetition(competitionId, competition);
 };
@@ -291,7 +292,7 @@ DBManager.prototype.assembleCompetitors = function () {
             startNum:competitorData.startingnumber,
             name:competitorData.competitorname,
             club:competitorData.competitorclub,
-            className:competitorData.classname,
+            className:competitorData.competitorclass,
             participations:parts
         };
 

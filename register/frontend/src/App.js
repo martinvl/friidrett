@@ -5,7 +5,7 @@ var ScheduleView = require('../../view-tests/views/ScheduleView/ScheduleView');
 var ContestantsView = require('../../view-tests/views/ContestantsView/ContestantsView');
 
 // --- Config ---
-var HOST = 'localhost/friidrett';
+var HOST = '/friidrett';
 var PUBLIC_PORT = 8888;
 var PRIVATE_PORT = 8889;
 
@@ -45,17 +45,17 @@ App.prototype.setupSubviews = function () {
 
     this.competitorView = new ContestantsView();
     this.competitorView.on('toggle_contestant', function (competitorId) {
-        var competitor = self.state.competitors[competitorId];
+        var event = self.state.events[this.eventId];
+        var participation = event.participations[competitorId];
 
         // copy
-        var newCompetitor = {
-            startNum:competitor.startNum,
-            name:competitor.name,
-            club:competitor.club,
-            present:!competitor.isPresent
+        var newParticipation = {
+            isPresent:!participation.isPresent,
+            seasonBest:participation.seasonBest,
+            results:participation.results
         };
 
-        self.saveCompetitor(competitorId, newCompetitor);
+        self.saveParticipation(competitorId, this.eventId, newParticipation);
     });
 };
 
@@ -72,6 +72,9 @@ App.prototype.setupSync = function () {
 
 App.prototype.setupConnection = function () {
     this.connection = io.connect('/', {port:PRIVATE_PORT, 'force new connection':true});
+    this.connection.on('connect', function () {
+        console.info('connected on private channel');
+    });
 };
 
 App.prototype.setState = function (state) {
@@ -117,8 +120,16 @@ App.prototype.getStateForEvent = function (eventId) {
     var participations = this.state.events[eventId].participations;
     for (var competitorId in participations) {
         var competitor = this.state.competitors[competitorId];
+        var participation = participations[competitorId];
 
-        competitors[competitorId] = competitor;
+        var competitorState = {
+            startNum:competitor.startNum,
+            name:competitor.name,
+            club:competitor.club,
+            isPresent:participation.isPresent
+        };
+
+        competitors[competitorId] = competitorState;
     }
 
     var event = this.state.events[eventId];
@@ -151,9 +162,10 @@ App.prototype.presentCompetitors = function () {
     this.el.appendChild(this.competitorView.el);
 };
 
-App.prototype.saveCompetitor = function (competitorId, competitor) {
-    this.connection.emit('saveCompetitor', {
+App.prototype.saveParticipation = function (competitorId, eventId, participation) {
+    this.connection.emit('saveParticipation', {
         competitorId:competitorId,
-        competitor:competitor
+        eventId:eventId,
+        participation:participation
     });
 };

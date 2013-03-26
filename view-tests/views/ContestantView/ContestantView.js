@@ -58,11 +58,6 @@ ContestantView.prototype.handleToggle = function () {
     this.emit('toggle', this);
 };
 
-ContestantView.prototype.toggle = function () {
-    this.state.present = !this.state.present;
-    this.update();
-};
-
 ContestantView.prototype.setState = function (state) {
     this.state = state;
 
@@ -71,7 +66,7 @@ ContestantView.prototype.setState = function (state) {
 
 ContestantView.prototype.update = function () {
     this.startNumField.innerHTML = this.state.startNum;
-    this.presentField.className = 'contestant_present' + (this.state.present ? '' : ' contestant_not_present');
+    this.presentField.className = 'contestant_present' + (this.state.isPresent ? '' : ' contestant_not_present');
     this.nameField.innerHTML = this.state.name;
     this.clubField.innerHTML = this.state.club;
 };

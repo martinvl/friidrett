@@ -39,8 +39,12 @@ dbManager.on('update', function () {
     console.dir(dbManager.competitions[1]);
 });
 
-private_transport.on('saveCompetitor', function (payload) {
-    console.dir('save');
-    console.dir(payload);
-    dbManager.updateCompetitor(payload.competitorId, payload.competitor);
+private_transport.on('connection', function (socket) {
+    socket.on('saveParticipation', function (payload) {
+        console.dir('save');
+        //console.dir(payload);
+
+        dist.setObjectForKeypath(payload.participation, 'events/' + payload.eventId + '/participations/' + payload.competitorId);
+        dbManager.updateParticipation(payload.competitorId, payload.eventId, payload.participation);
+    });
 });
