@@ -5,6 +5,7 @@
         "socket.io":">=0.9",
         "socket.io-client":">=0.9",
         "express":">=3.0",
+        "pg":">=0.14",
         "objdist":">=0.1",
         "objsync":">=0.1"
     }
