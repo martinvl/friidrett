@@ -1,8 +1,14 @@
+var EventEmitter = require('events').EventEmitter;
+
 function ContestantView() {
+    EventEmitter.prototype.constructor.apply(this);
+
     this.initialize();
     this.update();
 }
 
+ContestantView.prototype = new EventEmitter();
+ContestantView.prototype.constructor = ContestantView;
 module.exports = ContestantView;
 
 ContestantView.prototype.initialize = function () {
@@ -31,11 +37,11 @@ ContestantView.prototype.setupElement = function () {
     var self = this;
     if (this.presentField.hasOwnProperty('ontouchend')) {
         this.presentField.ontouchend = function () {
-            self.togglePresent();
+            self.handleToggle();
         };
     } else {
         this.presentField.onclick = function () {
-            self.togglePresent();
+            self.handleToggle();
         };
     }
 
@@ -48,7 +54,11 @@ ContestantView.prototype.setupElement = function () {
     this.el.appendChild(this.clubField);
 };
 
-ContestantView.prototype.togglePresent = function () {
+ContestantView.prototype.handleToggle = function () {
+    this.emit('toggle', this);
+};
+
+ContestantView.prototype.toggle = function () {
     this.state.present = !this.state.present;
     this.update();
 };

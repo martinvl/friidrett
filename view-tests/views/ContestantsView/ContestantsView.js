@@ -1,11 +1,16 @@
+var EventEmitter = require('events').EventEmitter;
 var ContestantView = require('../ContestantView/ContestantView');
 var EventHeaderView = require('../EventHeaderView/EventHeaderView');
 
 function ContestantsView() {
+    EventEmitter.prototype.constructor.apply(this);
+
     this.initialize();
     this.update();
 }
 
+ContestantsView.prototype = new EventEmitter();
+ContestantsView.prototype.constructor = ContestantsView;
 module.exports = ContestantsView;
 
 ContestantsView.prototype.initialize = function () {
@@ -37,6 +42,10 @@ ContestantsView.prototype.setState = function (state, silent) {
         this.update();
 };
 
+ContestantsView.prototype.handleToggle = function (contestantView) {
+    this.emit('toggle_contestant', contestantView);
+};
+
 ContestantsView.prototype.update = function () {
     this.headerView.update();
 
@@ -44,6 +53,11 @@ ContestantsView.prototype.update = function () {
     for (var idx in this.state.contestants) {
         var contestant = this.state.contestants[idx];
         var contestantView = new ContestantView();
+
+        var self = this;
+        contestantView.on('toggle', function (contestantView) {
+            self.handleToggle(contestantView);
+        });
 
         contestantView.setState(contestant);
 

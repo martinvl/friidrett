@@ -76,6 +76,10 @@ var state = {
     ]
 };
 
+view.on('toggle_contestant', function (contestantView) {
+    contestantView.toggle();
+});
+
 view.setState(state);
 
 document.body.appendChild(view.el);
