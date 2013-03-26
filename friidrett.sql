@@ -128,8 +128,8 @@ ALTER TABLE Competitor ADD CONSTRAINT competitor_competition
 CREATE TABLE EventParticipation (
        competitorId INTEGER,
        eventId INTEGER,
-       seasonBest REAL,
        isPresent BOOLEAN NOT NULL,
+       seasonBest REAL,
        results VARCHAR(510),
        PRIMARY KEY(competitorId, eventId)
 );
@@ -158,6 +158,8 @@ DROP TABLE Discipline_Class;
 DROP TABLE CompetitorClass;
 
 DROP TABLE Discipline;
+
+DROP TABLE Archetype;
 
 DROP TABLE Competition;
 */
