@@ -3,6 +3,7 @@ var path = require('path');
 var express = require('express');
 var io = require('socket.io');
 var ObjDist = require('objdist');
+var DBManager = require('../../private_server/DBManager');
 
 // --- Configuration ---
 var PORT = 8888;
@@ -26,9 +27,18 @@ transport.disable('browser client');
 // --- Setup distibution ---
 var dist = new ObjDist(transport, {prefix:DATA_PREFIX});
 
+// --- Setup DB manager ---
+var dbManager = new DBManager();
+
+dbManager.on('update', function () {
+    dist.setObject(dbManager.competitions[1]);
+    console.dir(dbManager.competitions[1]);
+});
+
+/*
 var state = {
     disciplines:[
-    ],
+        ],
     events:{
         1:{
             disciplineName:'Discipline 1',
@@ -152,3 +162,4 @@ function addDiscipline() {
 }
 
 addDiscipline();
+*/

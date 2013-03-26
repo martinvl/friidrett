@@ -43,18 +43,17 @@ EventView.prototype.setupElement = function () {
     infoField.className = 'event_info';
     this.el.appendChild(infoField);
 
-    this.disciplineField = document.createElement('div');
-    this.disciplineField.className = 'event_discipline';
-    infoField.appendChild(this.disciplineField);
-
     this.classNameField = document.createElement('div');
     this.classNameField.className = 'event_class';
     infoField.appendChild(this.classNameField);
 
+    this.disciplineField = document.createElement('div');
+    this.disciplineField.className = 'event_discipline';
+    infoField.appendChild(this.disciplineField);
+
     this.locationField = document.createElement('div');
     this.locationField.className = 'event_location';
-    infoField.appendChild(this.locationField);
-
+    this.el.appendChild(this.locationField);
 };
 
 EventView.prototype.handleSelect = function () {

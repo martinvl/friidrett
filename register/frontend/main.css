@@ -104,28 +104,27 @@ body
 
 .event_info
 {
-    height: 100%;
-    margin-left: 226px;
+    height: 50%;
 }
 
 .event_discipline
 {
-    float: left;
-    margin-left: 50px;
+    float: right;
     font-weigth: 600;
+    margin-right: 10px;
 }
 
 .event_class
 {
-    float: left;
+    float: right;
     font-weigth: 600;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .event_location
 {
-    float: right;
     margin-right: 10px;
+    text-align: right;
 }
 
 .contestants_view
@@ -209,6 +208,7 @@ body
 
     margin: 10px;
     margin-top: 0px;
+    margin-right: 30px;
 }
 
 .contestant_name

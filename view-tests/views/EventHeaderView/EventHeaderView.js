@@ -27,7 +27,7 @@ EventHeaderView.prototype.setupElement = function () {
     header.appendChild(this.disciplineField);
 
     this.classNameField = document.createElement('div');
-    this.classNameField.className = 'event__headerclass';
+    this.classNameField.className = 'event_header_class';
     header.appendChild(this.classNameField);
 
     var info = document.createElement('div');
