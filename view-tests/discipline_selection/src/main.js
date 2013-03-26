@@ -22,4 +22,8 @@ var state = [
 
 view.setState(state);
 
+view.on('select', function (discipline) {
+    window.alert(discipline.name);
+});
+
 document.body.appendChild(view.el);

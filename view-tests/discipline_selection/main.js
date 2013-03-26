@@ -427,7 +427,7 @@ DisciplineSelectionView.prototype.setState = function (state, silent) {
 };
 
 DisciplineSelectionView.prototype.handleSelection = function (disciplineView) {
-    this.emit('select', disciplineView.state.name);
+    this.emit('select', disciplineView.state);
 };
 
 DisciplineSelectionView.prototype.update = function () {
@@ -444,11 +444,6 @@ DisciplineSelectionView.prototype.update = function () {
         });
 
         this.disciplinesList.appendChild(disciplineView.el);
-
-        var bottom = document.createElement('div');
-        bottom.style.clear = 'both';
-
-        this.disciplinesList.appendChild(bottom);
     }
 };
 
@@ -663,6 +658,7 @@ DisciplineView.prototype.setupElement = function () {
     this.el = document.createElement('div');
     this.el.className = 'discipline';
 
+    var self = this;
     if (this.el.hasOwnProperty('ontouchend')) {
         this.el.ontouchend = function () {
             self.handleSelect();
@@ -725,6 +721,10 @@ var state = [
 ];
 
 view.setState(state);
+
+view.on('select', function (discipline) {
+    window.alert(discipline.name);
+});
 
 document.body.appendChild(view.el);
 

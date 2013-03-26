@@ -38,7 +38,7 @@ DisciplineSelectionView.prototype.setState = function (state, silent) {
 };
 
 DisciplineSelectionView.prototype.handleSelection = function (disciplineView) {
-    this.emit('select', disciplineView.state.name);
+    this.emit('select', disciplineView.state);
 };
 
 DisciplineSelectionView.prototype.update = function () {

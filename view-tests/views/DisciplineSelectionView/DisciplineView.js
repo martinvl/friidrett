@@ -24,6 +24,7 @@ DisciplineView.prototype.setupElement = function () {
     this.el = document.createElement('div');
     this.el.className = 'discipline';
 
+    var self = this;
     if (this.el.hasOwnProperty('ontouchend')) {
         this.el.ontouchend = function () {
             self.handleSelect();
