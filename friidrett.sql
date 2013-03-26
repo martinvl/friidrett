@@ -17,10 +17,24 @@ CREATE TABLE Competition (
 *******************************************************************/
 
 
+CREATE TABLE Archetype (
+       archtypeName VARCHAR(32) PRIMARY KEY
+);
+
+
+/*******************************************************************
+* Discipline table
+*******************************************************************/
+
+
 CREATE TABLE Discipline (
        disciplineName VARCHAR(32) PRIMARY KEY,
-       disciplineDescription VARCHAR(255)
+       archtype VARCHAR(32) NOT NULL,
+       description VARCHAR(255)
 );
+
+ALTER TABLE Discipline ADD CONSTRAINT discipline_archtype
+      FOREIGN KEY (archtype) REFERENCES Archtype (archtypeName);
 
 
 /*******************************************************************
@@ -114,8 +128,8 @@ ALTER TABLE Competitor ADD CONSTRAINT competitor_competition
 CREATE TABLE EventParticipation (
        competitorId INTEGER,
        eventId INTEGER,
-       seasonBest REAL,
        isPresent BOOLEAN NOT NULL,
+       seasonBest REAL,
        results VARCHAR(510),
        PRIMARY KEY(competitorId, eventId)
 );
@@ -144,6 +158,8 @@ DROP TABLE Discipline_Class;
 DROP TABLE CompetitorClass;
 
 DROP TABLE Discipline;
+
+DROP TABLE Archetype;
 
 DROP TABLE Competition;
 */
