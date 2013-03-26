@@ -387,7 +387,9 @@ process.binding = function (name) {
 
 });
 
-require.define("/Overview.js",function(require,module,exports,__dirname,__filename,process){function Overview() {
+require.define("/views/Overview/Overview.js",function(require,module,exports,__dirname,__filename,process){var EventHeaderView = require('../EventHeaderView/EventHeaderView');
+
+function Overview() {
     this.initialize();
     this.update();
 }
@@ -407,29 +409,8 @@ Overview.prototype.setupElement = function () {
     this.el = document.createElement('div');
     this.el.className = 'overview';
 
-    var header = document.createElement('div');
-    header.className = 'header';
-    this.el.appendChild(header);
-
-    this.disciplineField = document.createElement('div');
-    this.disciplineField.className = 'discipline';
-    header.appendChild(this.disciplineField);
-
-    this.classNameField = document.createElement('div');
-    this.classNameField.className = 'class';
-    header.appendChild(this.classNameField);
-
-    var info = document.createElement('div');
-    info.className = 'info';
-    this.el.appendChild(info);
-
-    this.locationField = document.createElement('div');
-    this.locationField.className = 'location';
-    info.appendChild(this.locationField);
-
-    this.startingTimeField = document.createElement('div');
-    this.startingTimeField.className = 'startingTime';
-    info.appendChild(this.startingTimeField);
+    this.headerView = new EventHeaderView();
+    this.el.appendChild(this.headerView.el);
 
     this.numContestantsField = document.createElement('div');
     this.numContestantsField.className = 'numContestants';
@@ -449,17 +430,17 @@ Overview.prototype.setupElement = function () {
     this.el.appendChild(this.rulesButton);
 };
 
-Overview.prototype.setState = function (state) {
+Overview.prototype.setState = function (state, silent) {
     this.state = state;
+    this.headerView.setState(state, true);
 
-    this.update();
+    if (!silent)
+        this.update();
 };
 
 Overview.prototype.update = function () {
-    this.disciplineField.innerHTML = this.state.discipline;
-    this.classNameField.innerHTML = this.state.className;
-    this.locationField.innerHTML = this.state.location;
-    this.startingTimeField.innerHTML = this.state.startingTime;
+    this.headerView.update();
+
     this.numContestantsField.innerHTML = this.state.numContestants + ' påmeldte';
     this.remarksField.innerHTML = this.state.remarks;
 
@@ -476,11 +457,11 @@ Overview.prototype.update = function () {
 };
 
 /*
-{
-    discipline:'Spyd',
-    className:'MJ',
-    location:'Hovedbanen',
-    startingTime:'09.00',
+   {
+   discipline:'Spyd',
+   className:'MJ',
+   location:'Hovedbanen',
+   startingTime:'09.00',
     numContestants:'38',
     remarks:'800g',
     notifications:['Husk å registrere vind', 'Husk å gå på do'],
@@ -490,7 +471,77 @@ Overview.prototype.update = function () {
 
 });
 
-require.define("/main.js",function(require,module,exports,__dirname,__filename,process){var Overview = require('./Overview');
+require.define("/views/EventHeaderView/EventHeaderView.js",function(require,module,exports,__dirname,__filename,process){function EventHeaderView() {
+    this.initialize();
+    this.update();
+}
+
+module.exports = EventHeaderView;
+
+EventHeaderView.prototype.initialize = function () {
+    this.setupState();
+    this.setupElement();
+};
+
+EventHeaderView.prototype.setupState = function () {
+    this.state = {};
+};
+
+EventHeaderView.prototype.setupElement = function () {
+    this.el = document.createElement('div');
+    this.el.className = 'event_header';
+
+    var header = document.createElement('div');
+    header.className = 'event_headline';
+    this.el.appendChild(header);
+
+    this.disciplineField = document.createElement('div');
+    this.disciplineField.className = 'event_discipline';
+    header.appendChild(this.disciplineField);
+
+    this.classNameField = document.createElement('div');
+    this.classNameField.className = 'event_class';
+    header.appendChild(this.classNameField);
+
+    var info = document.createElement('div');
+    info.className = 'event_info';
+    this.el.appendChild(info);
+
+    this.locationField = document.createElement('div');
+    this.locationField.className = 'event_location';
+    info.appendChild(this.locationField);
+
+    this.startingTimeField = document.createElement('div');
+    this.startingTimeField.className = 'event_startingTime';
+    info.appendChild(this.startingTimeField);
+};
+
+EventHeaderView.prototype.setState = function (state, silent) {
+    this.state = state;
+
+    if (!silent)
+        this.update();
+};
+
+EventHeaderView.prototype.update = function () {
+    this.disciplineField.innerHTML = this.state.discipline;
+    this.classNameField.innerHTML = this.state.className;
+    this.locationField.innerHTML = this.state.location;
+    this.startingTimeField.innerHTML = this.state.startingTime;
+};
+
+/*
+{
+    discipline:'Spyd',
+    className:'MJ',
+    location:'Hovedbanen',
+    startingTime:'09.00'
+}
+*/
+
+});
+
+require.define("/overview/src/main.js",function(require,module,exports,__dirname,__filename,process){var Overview = require('../../views/Overview/Overview');
 
 var view = new Overview();
 var state = {
@@ -519,5 +570,5 @@ container.appendChild(view.el);
 document.body.appendChild(container);
 
 });
-require("/main.js");
+require("/overview/src/main.js");
 })();

@@ -1,4 +1,4 @@
-var ContestantsView = require('./ContestantsView');
+var ContestantsView = require('../../views/ContestantsView/ContestantsView');
 
 var view = new ContestantsView();
 var state = {

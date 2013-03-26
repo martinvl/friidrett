@@ -1,4 +1,4 @@
-var Overview = require('./Overview');
+var Overview = require('../../views/Overview/Overview');
 
 var view = new Overview();
 var state = {

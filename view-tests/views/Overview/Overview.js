@@ -1,3 +1,5 @@
+var EventHeaderView = require('../EventHeaderView/EventHeaderView');
+
 function Overview() {
     this.initialize();
     this.update();
@@ -18,29 +20,8 @@ Overview.prototype.setupElement = function () {
     this.el = document.createElement('div');
     this.el.className = 'overview';
 
-    var header = document.createElement('div');
-    header.className = 'header';
-    this.el.appendChild(header);
-
-    this.disciplineField = document.createElement('div');
-    this.disciplineField.className = 'discipline';
-    header.appendChild(this.disciplineField);
-
-    this.classNameField = document.createElement('div');
-    this.classNameField.className = 'class';
-    header.appendChild(this.classNameField);
-
-    var info = document.createElement('div');
-    info.className = 'info';
-    this.el.appendChild(info);
-
-    this.locationField = document.createElement('div');
-    this.locationField.className = 'location';
-    info.appendChild(this.locationField);
-
-    this.startingTimeField = document.createElement('div');
-    this.startingTimeField.className = 'startingTime';
-    info.appendChild(this.startingTimeField);
+    this.headerView = new EventHeaderView();
+    this.el.appendChild(this.headerView.el);
 
     this.numContestantsField = document.createElement('div');
     this.numContestantsField.className = 'numContestants';
@@ -60,17 +41,17 @@ Overview.prototype.setupElement = function () {
     this.el.appendChild(this.rulesButton);
 };
 
-Overview.prototype.setState = function (state) {
+Overview.prototype.setState = function (state, silent) {
     this.state = state;
+    this.headerView.setState(state, true);
 
-    this.update();
+    if (!silent)
+        this.update();
 };
 
 Overview.prototype.update = function () {
-    this.disciplineField.innerHTML = this.state.discipline;
-    this.classNameField.innerHTML = this.state.className;
-    this.locationField.innerHTML = this.state.location;
-    this.startingTimeField.innerHTML = this.state.startingTime;
+    this.headerView.update();
+
     this.numContestantsField.innerHTML = this.state.numContestants + ' påmeldte';
     this.remarksField.innerHTML = this.state.remarks;
 
@@ -87,11 +68,11 @@ Overview.prototype.update = function () {
 };
 
 /*
-{
-    discipline:'Spyd',
-    className:'MJ',
-    location:'Hovedbanen',
-    startingTime:'09.00',
+   {
+   discipline:'Spyd',
+   className:'MJ',
+   location:'Hovedbanen',
+   startingTime:'09.00',
     numContestants:'38',
     remarks:'800g',
     notifications:['Husk å registrere vind', 'Husk å gå på do'],
