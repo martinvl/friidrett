@@ -395,7 +395,7 @@ var ContestantsView = require('../../view-tests/views/ContestantsView/Contestant
 
 // --- Config ---
 var HOST = '/friidrett';
-var PUBLIC_PORT = 80;
+var PUBLIC_PORT = 8888;
 var PRIVATE_PORT = 8889;
 
 function App() {

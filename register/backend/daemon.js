@@ -8,7 +8,7 @@ var ObjDist = require('objdist');
 var DBManager = require('../../private_server/DBManager');
 
 // --- Configuration ---
-var PUBLIC_PORT = 80;
+var PUBLIC_PORT = 8888;
 var PRIVATE_PORT = 8889;
 var DATA_PREFIX = 'friidrett';
 
