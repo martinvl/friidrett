@@ -7,7 +7,8 @@
 
 CREATE TABLE Competition (
        competitionId INTEGER PRIMARY KEY,
-       competitionName VARCHAR(255) UNIQUE NOT NULL
+       competitionName VARCHAR(255) NOT NULL,
+       isOpen BOOLEAN
 );
 
 
@@ -67,6 +68,8 @@ CREATE TABLE Event (
        competition INTEGER NOT NULL,
        location VARCHAR(255),
        startTime TIME,
+       notifications VARCHAR(255),
+       isOpen BOOLEAN,
        UNIQUE(disciplineName, className, competition)
 );
 
