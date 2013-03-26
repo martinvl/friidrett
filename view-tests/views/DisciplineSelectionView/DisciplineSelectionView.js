@@ -23,7 +23,7 @@ DisciplineSelectionView.prototype.setupState = function () {
 
 DisciplineSelectionView.prototype.setupElement = function () {
     this.el = document.createElement('div');
-    this.el.className = 'disciplines_view';
+    this.el.className = 'discipline_selection';
 
     this.disciplinesList = document.createElement('div');
     this.disciplinesList.className = 'disciplines';

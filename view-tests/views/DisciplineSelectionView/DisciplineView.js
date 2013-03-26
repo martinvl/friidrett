@@ -22,7 +22,7 @@ DisciplineView.prototype.setupState = function () {
 
 DisciplineView.prototype.setupElement = function () {
     this.el = document.createElement('div');
-    this.el.className = 'discipline_view';
+    this.el.className = 'discipline';
 
     if (this.el.hasOwnProperty('ontouchend')) {
         this.el.ontouchend = function () {
