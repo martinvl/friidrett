@@ -1,4 +1,5 @@
 var EventEmitter = require('events').EventEmitter;
+var DisciplineView = require('./DisciplineView');
 
 function DisciplineSelectionView() {
     EventEmitter.prototype.constructor.apply(this);
@@ -43,17 +44,17 @@ DisciplineSelectionView.prototype.handleSelection = function (disciplineView) {
 DisciplineSelectionView.prototype.update = function () {
     this.disciplinesList.innerHTML = '';
     for (var idx in this.state) {
-        var contestant = this.state.contestants[idx];
-        var contestantView = new ContestantView();
+        var discipline = this.state[idx];
+        var disciplineView = new DisciplineView();
+
+        disciplineView.setState(discipline);
 
         var self = this;
-        contestantView.on('toggle', function (contestantView) {
-            self.handleToggle(contestantView);
+        disciplineView.on('select', function () {
+            self.handleSelection(this);
         });
 
-        contestantView.setState(contestant);
-
-        this.contestantsList.appendChild(contestantView.el);
+        this.disciplinesList.appendChild(disciplineView.el);
     }
 };
 
