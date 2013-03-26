@@ -16,7 +16,7 @@ DBManager.prototype.initialize = function () {
 };
 
 DBManager.prototype.setupClient = function () {
-    var connectionData = 'tcp://dbuser:foo@localhost/friidrett';
+    var connectionData = 'tcp://dbuser:ech748@localhost/friidrett';
 
     var self = this;
     this.client = new pg.Client(connectionData);

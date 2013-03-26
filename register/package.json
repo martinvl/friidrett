@@ -8,5 +8,9 @@
         "pg":">=0.14",
         "objdist":">=0.1",
         "objsync":">=0.1"
+    },
+    "bin":
+    {
+        "friidrett":"./backend/daemon.js"
     }
 }
