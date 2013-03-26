@@ -5,7 +5,7 @@
 
 CREATE TABLE Competition (
        competitionId INTEGER PRIMARY KEY,
-       competitionName VARCHAR(255) NOT NULL
+       competitionName VARCHAR(255) UNIQUE NOT NULL
 );
 
 
@@ -15,7 +15,8 @@ CREATE TABLE Competition (
 
 
 CREATE TABLE Discipline (
-       disciplineName VARCHAR(32) PRIMARY KEY
+       disciplineName VARCHAR(32) PRIMARY KEY,
+       disciplineDescription VARCHAR(255)
 );
 
 
@@ -25,7 +26,8 @@ CREATE TABLE Discipline (
 
 
 CREATE TABLE CompetitorClass (
-       className VARCHAR(32) PRIMARY KEY
+       className VARCHAR(32) PRIMARY KEY,
+       classDescription VARCHAR(255)
 );
 
 
@@ -58,9 +60,9 @@ ALTER TABLE Discipline_Class ADD CONSTRAINT comp_class
 
 CREATE TABLE Event (
        eventId INTEGER PRIMARY KEY,
-       disciplineName VARCHAR(32),
-       className VARCHAR(32),
-       competition INTEGER,
+       disciplineName VARCHAR(32) NOT NULL,
+       className VARCHAR(32) NOT NULL,
+       competition INTEGER NOT NULL,
        location VARCHAR(255),
        startTime TIME,
        UNIQUE(disciplineName, className, competition)
@@ -71,11 +73,9 @@ CREATE TABLE Event (
 ALTER TABLE Event ADD CONSTRAINT event_discipline
        FOREIGN KEY (disciplineName, className) REFERENCES Discipline_Class(disciplineName, className);
 
-/*ALTER TABLE Event ADD CONSTRAINT event_class
-       FOREIGN KEY (className) REFERENCES CompetitorClass(className);*/
-
 ALTER TABLE Event ADD CONSTRAINT event_competition
        FOREIGN KEY (competition) REFERENCES Competition(competitionId);
+
 
 /*******************************************************************
 * Competitor table
@@ -83,12 +83,13 @@ ALTER TABLE Event ADD CONSTRAINT event_competition
 
 
 CREATE TABLE Competitor (
-       startingNumber INTEGER,
+       competitorId INTEGER PRIMARY KEY,
+       startingNumber INTEGER NOT NULL,
        competitorName VARCHAR(255),
        competitorClub VARCHAR(255),
        competitorClass VARCHAR(32),
-       competition INTEGER,
-       PRIMARY KEY(startingNumber, competition)
+       competition INTEGER NOT NULL,
+       UNIQUE(startingNumber, competition)
 );
 
 /* Foreign keys */
@@ -106,45 +107,28 @@ ALTER TABLE Competitor ADD CONSTRAINT competitor_competition
 
 
 CREATE TABLE EventParticipation (
-       startingNumber INTEGER,
+       competitorId INTEGER,
        eventId INTEGER,
-       seasonBest DOUBLE,
-       isPesent BOOLEAN,
+       seasonBest REAL,
+       isPresent BOOLEAN NOT NULL,
        results VARCHAR(510),
-       PRIMARY KEY(startingNumber, eventId)
+       PRIMARY KEY(competitorId, eventId)
 );
 
 /* Foreign keys */
 
-ALTER TABLE EventParticipation ADD CONSTRAINT participation_event_
+ALTER TABLE EventParticipation ADD CONSTRAINT participation_event
        FOREIGN KEY (eventId) REFERENCES Event(eventId);
 
+ALTER TABLE EventParticipation ADD CONSTRAINT participation_competitor
+       FOREIGN KEY (competitorId) REFERENCES Competitor(competitorId);
 
-/*******************************************************************
-* Constraint drops
-*******************************************************************/
-
-/*
-DROP CONSTRAINT competitor_competition;
-
-DROP CONSTRAINT competitor_class;
-
-DROP CONSTRAINT event_discipline;
-
-DROP CONSTRAINT event_competition;
-
-DROP CONSTRAINT event_class;
-
-DROP CONSTRAINT comp_class;
-
-DROP CONSTRAINT comp_discipline;
-*/
 
 /*******************************************************************
 * Table drops
 *******************************************************************/
-
-/*DROP TABLE EventParticipation;
+/*
+DROP TABLE EventParticipation;
 
 DROP TABLE Competitor;
 
@@ -156,4 +140,5 @@ DROP TABLE CompetitorClass;
 
 DROP TABLE Discipline;
 
-DROP TABLE Competition;*/
+DROP TABLE Competition;
+*/
